@@ -4,7 +4,7 @@ const router = express.Router()
 const menuController = require("../controllers/menuController")
 
 router.get("/menus", menuController.GET)
-router.get("/menus/:id", menuController.GET_ID)
+router.get("/menus/:id", menuController.GETBYID)
 router.post("/menus", menuController.POST)
 router.put("/menus/:id", menuController.PUT)
 router.put("/menus/:id/add-comment", menuController.PUT_COMMENT)
