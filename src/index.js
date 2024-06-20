@@ -25,6 +25,7 @@ app.use(require("./routes/foodRoutes.js"));
 app.use(require("./routes/menuRoutes.js"));
 app.use(require("./routes/orderRoutes.js"));
 app.use(require("./routes/orderDetailsRoutes.js"));
+app.use(require("./routes/authRoutes.js"));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(spects));
 
