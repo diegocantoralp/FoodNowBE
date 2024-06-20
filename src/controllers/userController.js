@@ -53,3 +53,4 @@ exports.SIGNIN = async(req, res) => {
     res.status(500).json({ message: 'Error during sign in', error: error.message });
   }
 };
+
