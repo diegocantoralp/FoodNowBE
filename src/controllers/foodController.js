@@ -17,6 +17,19 @@ module.exports.POST = async(req,res) => {
     res.send(respuesta);
 }
 
+module.exports.GETBYID = async(req,res) => {
+    const id = req.params.id;
+    try {
+        const food = await ModelFood.findById(id);
+        if (!food) {
+            return res.status(404).json({ error: "Food not found" });
+        }
+        res.json(food);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
 module.exports.PUT = async(req,res) => {
     const body = req.body;
     const id = req.params.id;
