@@ -9,6 +9,17 @@ module.exports.GET = async(req,res) => {
     }
 }
 
+exports.GETBYINSTITUTION = (req, res) => {
+  // Suponiendo que tienes una manera de acceder a tus datos, por ejemplo, un arreglo de objetos clients
+  const clientsByInstitution = clients.filter(client => client.institution === true);
+  
+  if (clientsByInstitution.length) {
+    res.json(clientsByInstitution);
+  } else {
+    res.status(404).send('No clients found for the given institution');
+  }
+};
+
 module.exports.POST = async(req,res) => {
     const body = req.body;
 
@@ -106,3 +117,38 @@ exports.SIGNIN = async (req, res) => {
     }
 };
 
+async function getInstitutionValue(name) {
+  try {
+    const client = await Client.findOne({ name: name });
+    if (client) {
+      return { success: true, institution: client.institution };
+    } else {
+      return { success: false, message: 'Cliente no encontrado' };
+    }
+  } catch (error) {
+    return { success: false, message: 'Error al buscar el cliente', error: error.message };
+  }
+}
+
+// Asumiendo que ya tienes importado el modelo Client
+// const Client = require('../models/clientModel');
+
+exports.GETINSTITUTION = async (req, res) => {
+  try {
+    const clientId = req.params.id;
+    console.log(`Buscando cliente con ID: ${clientId}`); // Log de depuración
+
+    const client = await Client.findById(clientId);
+
+    if (!client) {
+      console.log('Cliente no encontrado'); // Log de depuración
+      return res.status(404).send('Cliente no encontrado');
+    }
+
+    console.log(`Valor de institution: ${client.institution}`); // Log de depuración
+    res.json({ institution: client.institution });
+  } catch (error) {
+    console.error('Error al obtener el cliente:', error); // Log del error
+    res.status(500).send('Error al obtener el cliente');
+  }
+};
