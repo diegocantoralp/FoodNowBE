@@ -1,4 +1,5 @@
 const ModelClient = require("../models/clientModel");
+const ModelMenu = require("../models/menuModel")
 
 module.exports.GET = async(req,res) => {
     try {
@@ -8,6 +9,22 @@ module.exports.GET = async(req,res) => {
         res.status(500).send(error.message);
     }
 }
+
+// get client by id
+exports.GETBYID = async(req, res)=>{
+  const { id } = req.params;
+  try {
+    const client = await ModelClient.findById(id);
+    if (!client) {
+      return res.status(404).json({ error: "Client not found" });
+    }
+    res.json(client);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching client" });
+  }
+}
+
 
 exports.GETBYINSTITUTION = (req, res) => {
   // Suponiendo que tienes una manera de acceder a tus datos, por ejemplo, un arreglo de objetos clients
@@ -64,6 +81,31 @@ module.exports.DELETE = async(req,res) => {
     res.send(respuesta);
 }
 
+exports.REMOVE_FAVORITE_MENU = async (req, res) => {
+  try {
+      const clientId = req.params.clientId; // O asumiendo que obtienes esto de alguna manera
+      const menuIdToRemove = req.params.menuId; // El ID del menú favorito a eliminar
+
+      // Buscar el documento del cliente por ID
+      const client = await ModelClient.findById(clientId);
+
+      if (!client) {
+          return res.status(404).json({ error: "Cliente no encontrado" });
+      }
+
+      // Eliminar el ID del menú favorito de la lista de favoritos
+      client.favoriteMenus = client.favoriteMenus.filter(menuId => menuId.toString() !== menuIdToRemove);
+
+      // Guardar el documento del cliente actualizado
+      await client.save();
+
+      res.json({ message: "Menú favorito eliminado con éxito" });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al eliminar menú favorito" });
+  }
+};
+
 exports.SIGNUP = async (req, res) => {
     try {
       const { name, email, password, institution } = req.body;
@@ -107,10 +149,9 @@ exports.SIGNIN = async (req, res) => {
        return res.status(401).json({ message: 'Invalid password' });
      }
   
-     // Aquí podrías generar un token de sesión o realizar cualquier otra acción necesaria para el inicio de sesión
   
      // Enviar respuesta de éxito
-     res.status(200).json({ message: 'Login successful' });
+     res.status(200).json({ institution: client.institution, id: client._id });
     } catch (error) {
       // Manejar errores
       res.status(500).json({ message: 'Error during sign in', error: error.message });

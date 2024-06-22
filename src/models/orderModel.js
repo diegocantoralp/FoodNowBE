@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
+  menus: { type: Array, required: true },
   date: { type: Date, required: true },
   status: { type: String, required: true, enum: ['pending', 'completed', 'cancelled'] },
   total: { type: Number, required: true },

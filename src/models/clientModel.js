@@ -31,6 +31,3 @@ clientSchema.methods.isValidPassword = async function(password) {
 const ModelClient = mongoose.model("clients", clientSchema)
 
 module.exports = ModelClient;
-
-
-    

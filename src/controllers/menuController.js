@@ -52,7 +52,7 @@ module.exports.PUT_COMMENT = async(req,res) => {
             return res.status(404).send({ error: "Menú no encontrado" });
         }
 
-        res.send(menu);
+        res.send({ username, comment, id });
     } catch (error) {
         console.error(error);
         res.status(500).send({ error: "Error al añadir comentario al menú" });
