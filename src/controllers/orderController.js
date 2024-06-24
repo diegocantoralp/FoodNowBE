@@ -33,3 +33,16 @@ module.exports.DELETE = async(req,res) => {
 
     res.send(respuesta);
 }
+
+module.exports.GETBYUSERID = async(req,res) => {
+    const id = req.params.id;
+    try {
+        const orders = await ModelOrder.find({client_id: id});
+        if (!orders) {
+            return res.status(404).json({ error: "Order not found" });
+        }
+        res.json(orders);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
